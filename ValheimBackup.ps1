@@ -52,11 +52,11 @@ Write-Output "`nCreated $(Get-Date -Format "yyyy_MM_dd-HH_mm_ss")_Backup`n" >> $
 $Keep = 3
 
 # Specifies file mask
-$FileMask = "*.*"
+$FileMask = "*.zip"
 
 # Creates a full path plus file mask value
 $FullPath = $BackupDir + $FileMask
-$FullPath
+
 # Creates an array of all files of a file type within a given Folder, reverse sort.
 $AllFiles = @(Get-ChildItem $FullPath) | SORT Name -Descending 
 
@@ -100,6 +100,3 @@ if (-not (Test-Path -Path $Docs\ValheimBackup.log)) {
 #Workaround to actually PREPEND
 @($(Get-Content $Docs\ValheimBackupCurrent.log) + $(Get-Content $Docs\ValheimBackup.log)) | Set-Content $Docs\ValheimBackup.log | Out-Null
 Remove-Item $Docs\ValheimBackupCurrent.log
-
-# Because I can
-Set-Location C:\
