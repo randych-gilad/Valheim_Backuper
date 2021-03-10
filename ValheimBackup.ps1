@@ -37,7 +37,7 @@ Add-Content "$($BackupDir)\desktop.ini" -Value $DesktopIni
 #Finally, set the Folder's attributes
 (Get-Item $BackupDir -Force).Attributes = 'ReadOnly, Directory'
 
-#Purge screenshots
+# Purge screenshots
 if (Test-Path -Path "$Folder\IronGate\Valheim\screenshots\") {
     Remove-Item $Folder\IronGate\Valheim\screenshots\
     Write-Output "`nPurged screenshot folder before creating backup."  >> $Docs\ValheimBackupCurrent.log
