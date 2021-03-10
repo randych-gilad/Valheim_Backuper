@@ -1,4 +1,4 @@
-﻿# Output is logged to nearby file with Write-Output
+# Output is logged to nearby file with Write-Output
 # Output of Folder creation cmdlet is nulled for reasons
 # Logging is divided by launches and appends
 
@@ -9,16 +9,15 @@ $Docs = "$env:USERPROFILE\Documents"
 $Folder = "$env:USERPROFILE\AppData\LocalLow\"
 
 # Defines base directory path
-$BackupDir = "$Docs\ValheimBackups"
+$BackupDir = "$Docs\ValheimBackups\"
 
 Write-Output "Backup creation: $(Get-Date -Format "yyyy:MM:dd HH:mm:ss")" >> "$Docs\ValheimBackupCurrent.log"
 
 # Create directory for backups if it doesn't exist
 if (-not (Test-Path -Path $BackupDir)) {
-    Write-Output "`nDirectory $Docs\ValheimBackups doesn't exist." >> $Docs\ValheimBackupCurrent.log
-    #Add-Content -Value "`nDirectory $Docs\ValheimBackups doesn't exist." -Path $Docs\ValheimBackupCurrent.log
-    New-Item -ItemType Directory -Path "$Docs\ValheimBackups" | Out-Null
-    Write-Output "`nCreated $Docs\ValheimBackups." >> $Docs\ValheimBackupCurrent.log
+    Write-Output "`nDirectory $BackupDir doesn't exist." >> $Docs\ValheimBackupCurrent.log
+    New-Item -ItemType Directory -Path "$BackupDir" | Out-Null
+    Write-Output "`nCreated $BackupDir." >> $Docs\ValheimBackupCurrent.log
     }
 
 # Now make it have a cozy gear icon
@@ -46,7 +45,7 @@ if (Test-Path -Path "$Folder\IronGate\Valheim\screenshots\") {
 # Compress worlds and characters
 &Compress-Archive `
 -Path $Folder\IronGate `
--DestinationPath "$Docs\ValheimBackups\$(Get-Date -Format "yyyy_MM_dd-HH_mm_ss")_Backup"
+-DestinationPath "$BackupDir\$(Get-Date -Format "yyyy_MM_dd-HH_mm_ss")_Backup"
 Write-Output "`nCreated $(Get-Date -Format "yyyy_MM_dd-HH_mm_ss")_Backup`n" >> $Docs\ValheimBackupCurrent.log
 
 # Defines how many files you want to keep
@@ -56,8 +55,8 @@ $Keep = 3
 $FileMask = "*.*"
 
 # Creates a full path plus file mask value
-$FullPath = $Path + $FileMask
-
+$FullPath = $BackupDir + $FileMask
+$FullPath
 # Creates an array of all files of a file type within a given Folder, reverse sort.
 $AllFiles = @(Get-ChildItem $FullPath) | SORT Name -Descending 
 
@@ -75,7 +74,7 @@ If ($AllFiles.count -gt $Keep) {
     ForEach ($DeleteFile in $DeleteFiles) {
 
         # Creates a full path and delete file value
-        $dFile = $Path + $DeleteFile.Name
+        $dFile = $BackupDir + $DeleteFile.Name
 
         # Deletes the specified file
         Remove-Item $dFile
